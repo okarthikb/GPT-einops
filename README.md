@@ -1,1 +1,3 @@
 # GPT-HP
+
+12M parameter GPT model trained with all Harry Potter books...
