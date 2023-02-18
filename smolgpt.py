@@ -1,11 +1,8 @@
-import torch, random, wandb
+import torch
 import torch.nn as nn
 import torch.nn.functional as F
-import matplotlib.pyplot as plt
-from torch.cuda.amp import GradScaler, autocast
-from torch.optim import Adam
-from einops import rearrange
 from torch import einsum
+from einops import rearrange
 from math import sqrt
 
 
