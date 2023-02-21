@@ -86,13 +86,14 @@ class GPT(nn.Module):
     xm = (self.emb(t) + self.pos[:l], self.m[:l, :l])
     return self.out(self.layers(xm)[0]).squeeze()
 
-  def loss(self, it, ot, icl=False):
-    ce_loss = F.cross_entropy(
+  def loss_fn(self, it, ot, icl=False):
+    loss = F.cross_entropy(
       rearrange(self(it), 'b l v -> (b l) v'),
       rearrange(ot, 'b l -> (b l)'),
       reduction='none'
-    )
+    )  # (b * l,)
     if icl:  # compute in-context learning score
       with torch.no_grad():
-        icl_score = (ce_loss[self.l - 1::self.l] - ce_loss[0::self.l]).mean().item()
-    return ce_loss.mean(), icl_score
+        icl_score = loss[500::self.l] - loss[50::self.l]
+      return loss.mean(), icl_score.mean()
+    return loss.mean()
