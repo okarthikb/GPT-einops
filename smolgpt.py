@@ -94,5 +94,5 @@ class GPT(nn.Module):
     )
     if icl:  # compute in-context learning score
       with torch.no_grad():
-        icl_score = (ce_loss[-1::self.l] - ce_loss[0::self.l]).mean().item()
+        icl_score = (ce_loss[self.l - 1::self.l] - ce_loss[0::self.l]).mean().item()
     return ce_loss.mean(), icl_score
