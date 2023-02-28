@@ -67,7 +67,7 @@ if __name__ == '__main__':
   parser.add_argument('--world', type=int)
   args = parser.parse_args() 
 
-  #  
+  # IP address and port of master worker
   os.environ['MASTER_ADDR'] = args.addr 
   os.environ['MASTER_PORT'] = args.port
 
