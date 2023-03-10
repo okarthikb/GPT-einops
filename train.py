@@ -3,7 +3,6 @@ import torch.nn as nn
 import torch.nn.functional as F
 import torch.distributed as dist
 import torch.multiprocessing as mp
-import youtokentome as yttm
 from gpt import *
 from lion_pytorch import Lion
 from torch.cuda.amp import GradScaler, autocast
