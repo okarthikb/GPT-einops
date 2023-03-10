@@ -27,7 +27,7 @@ def process(rank, world_size):
   nh = 16
   nl = 16
   l = 512
-  v = yttm.BPE('c4-5e7-tokenizer.model').vocab_size()
+  v = 4096
   batch_size = 16
   steps = 1200
   lr = 1e-4
