@@ -5,7 +5,7 @@ import torch.distributed as dist
 import torch.multiprocessing as mp
 import youtokentome as yttm
 from gpt import *
-from torch.optim import Adam
+from lion_pytorch import Lion
 from torch.cuda.amp import GradScaler, autocast
 
 
@@ -25,7 +25,7 @@ def process(rank, world_size):
   # hyperparams
   d = 512
   nh = 16
-  nl = 8
+  nl = 16
   l = 512
   v = yttm.BPE('c4-5e7-tokenizer.model').vocab_size()
   batch_size = 16
@@ -35,7 +35,7 @@ def process(rank, world_size):
   # initialize model and optimizer
   torch.manual_seed(69)  # set seed so every process initializes same model
   gpt = GPT(d, nh, nl, l, v).cuda(rank)
-  optimizer = Adam(gpt.parameters(), lr)
+  optimizer = Lion(gpt.parameters(), lr)
 
   # generator for data loading
   def generator():
@@ -47,8 +47,8 @@ def process(rank, world_size):
   if rank == 0:
     nparam = sum(p.numel() for p in gpt.parameters() if p.requires_grad)
     print(f'{nparam} parameters\n')
-    wandb.init(project='...')
-    wandb.run.name = '...'
+    wandb.init(project='GPT DDP')
+    wandb.run.name = 'hehehe'
     print()
 
   # train loop
@@ -83,6 +83,7 @@ def process(rank, world_size):
     optimizer.zero_grad()
 
   if rank == 0:
+    print()
     wandb.finish()
     torch.save(gpt.state_dict(), 'model.pt')
  
